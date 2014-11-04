@@ -7,10 +7,11 @@
 
 (deftest test-mean-n
   (is (= [1.1M 3] (stat/mean-n [1.1M 1.1M 1.1M])))
-  (is (= [0 0] (stat/mean-n []) "empty series"))
-  (is (= [1.1M 1] (stat/mean-n [1.1M]) "series with single value"))
-  (is (= [-0.283333333M 6] (stat/mean-n [-1.1M 0.1M 0.1M, 0.1M, -1.1M, 0.2M]
-                             "series with non-terminating decimal representation"))))
+  (is (= [0 0] (stat/mean-n [])) "empty series")
+  (is (= [1.1M 1] (stat/mean-n [1.1M])) "series with single value")
+  (is (= [-0.2833333333M 6]
+        (with-precision 10 :rounding HALF_EVEN (stat/mean-n [-1.1M 0.1M 0.1M, 0.1M, -1.1M, 0.2M])))
+        "result with non-terminating decimal representation"))
 
 (deftest test-sum-n
   (is (= [3.3M 3] (stat/sum-n [1.1M 1.1M 1.1M])) "series of the same value")
