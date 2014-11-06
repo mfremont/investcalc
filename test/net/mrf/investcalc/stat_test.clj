@@ -18,3 +18,8 @@
   (is (= [0 0] (stat/sum-n [])) "empty series")
   (is (= [1010.192347M 1] (stat/sum-n [1010.192347M])) "series with single value")
   (is (= [1.09000001M 3] (stat/sum-n [1.1M -0.01M 0.00000001M]))))
+
+(deftest test-variance-p
+  (is (= 0.00M (with-precision 2 :rounding HALF_EVEN (stat/variance-p [0.0M]))))
+  (is (= 0.06401875M (with-precision 8 :rounding HALF_EVEN
+         (stat/variance-p [0.1M, 0.2M, 0.01M, 0.666666667M])))))
