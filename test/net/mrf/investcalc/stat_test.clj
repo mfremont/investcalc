@@ -21,6 +21,11 @@
 
 (deftest test-variance-p
   (is (= 0.00M (with-precision 2 :rounding HALF_EVEN (stat/variance-p [0.0M]))))
-  (is (= 0.00M (stat/variance-p [0.1M 0.1M 0.1M 0.1M 0.1M])))
+  (is (= 0.00M (stat/variance-p [0.1M 0.1M 0.1M 0.1M 0.1M])) "series of the same value")
   (is (= 0.06401875M (with-precision 8 :rounding HALF_EVEN
          (stat/variance-p [0.1M, 0.2M, 0.01M, 0.666666667M])))))
+
+(deftest test-variance-s
+  (is (= 0.00M (stat/variance-s [0.1M 0.1M 0.1M 0.1M 0.1M])) "series of the same value")
+  (is (= 0.085358333M (with-precision 8 :rounding HALF_EVEN
+         (stat/variance-s [0.1M, 0.2M, 0.01M, 0.666666667M])))))
