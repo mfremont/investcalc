@@ -3,6 +3,9 @@
   net.mrf.investcalc.stat
   (:require [clojure.math.numeric-tower :as math]))
 
+(defn scaled-decimal [scale n]
+  (.setScale (bigdec n) scale (.getRoundingMode *math-context*)))
+
 (defn sum-n
   "Calculates the sum of the seq series and returns a tuple consisting of the sum and the number of
   elements in the series."
@@ -36,9 +39,19 @@
     ))
 
 (defn variance-s
-  "Calculates the variance of the sample requested by the seq series."
+  "Calculates the variance of the sample represented by the seq series."
   [series]
   (let [[mean n] (mean-n series)]
     ; sum((x - mean)^2) / (n -1)
     (/ (reduce + (map (partial deviation-squared mean) series)) (- n 1))
   ))
+
+(defn stddev-p
+  "Calculates the standard deviation of the population represented by the seq series."
+  [series]
+  (math/sqrt (variance-p series)))
+
+(defn stddev-s
+  "Calculates the standard deviation of the sample represented by the seq series."
+  [series]
+  (math/sqrt (variance-s series)))
