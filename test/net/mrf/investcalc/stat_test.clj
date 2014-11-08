@@ -41,3 +41,16 @@
   (is (= 0 (stat/stddev-s [0.1M 0.1M 0.1M 0.1M 0.1M])) "series of the same value")
   (is (= 0.29216149M (with-precision 16 :rounding HALF_EVEN
           (stat/scaled-decimal 8 (stat/stddev-s [0.1M 0.2M 0.01M 0.666666667M]))))))
+
+(def series-A [2.82M 1.33M 2.10M -1.75M 4.66M -1.10M 3.98M 2.50M 2.02M 2.14M -0.92M 4.31M])
+(def series-B [3.75M 1.93M 2.34M -1.34M 5.09M -2.90M 3.14M 4.60M 3.05M 2.53M -3.46M 4.57M])
+
+(deftest test-covariance-p
+  (is (= 5.23926528M (with-precision 16 :rounding HALF_EVEN
+          (stat/scaled-decimal 8 (stat/covariance-p series-A series-B))))
+      "covariance of two example series with expected calculated by Excel"))
+
+(deftest test-covariance-s
+  (is (= 5.71556212M (with-precision 16 :rounding HALF_EVEN
+          (stat/scaled-decimal 8 (stat/covariance-s series-A series-B))))
+      "covariance of two example series with expected calculated by Excel"))

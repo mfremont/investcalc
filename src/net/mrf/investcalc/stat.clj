@@ -4,6 +4,7 @@
   (:require [clojure.math.numeric-tower :as math]))
 
 (defn scaled-decimal [scale n]
+  ; TODO: default *math-context*
   (.setScale (bigdec n) scale (.getRoundingMode *math-context*)))
 
 (defn sum-n
@@ -41,6 +42,7 @@
 (defn variance-s
   "Calculates the variance of the sample represented by the seq series."
   [series]
+  ; TODO: behavior if only one element in seq -> division by 0
   (let [[mean n] (mean-n series)]
     ; sum((x - mean)^2) / (n -1)
     (/ (reduce + (map (partial deviation-squared mean) series)) (- n 1))
@@ -54,4 +56,31 @@
 (defn stddev-s
   "Calculates the standard deviation of the sample represented by the seq series."
   [series]
+  ; TODO: behavior if only one element in seq -> division by 0
   (math/sqrt (variance-s series)))
+
+(defn covariance-p
+  "Calculates the covariance of the popluations represented by the seqs A and B."
+  [a b]
+  ; TODO: behavior if a and b are not the same length
+  ; TODO: behavior if seq is empty
+  (let [[mean-a n-a] (mean-n a)
+        [mean-b n-b] (mean-n b)
+        deviation-a (fn [x] (- x mean-a))
+        deviation-b (fn [x] (- x mean-b))]
+    ; sum(deviation(a) * deviation(b)) / n
+    (/ (reduce + (map * (map deviation-a a) (map deviation-b b)))
+       n-a)))
+
+(defn covariance-s
+  "Calculates the covariance of the samples represented by the seqs A and B."
+  [a b]
+  ; TODO: behavior if a and b are not the same length
+  ; TODO: behavior if only one element in seq -> division by 0
+  (let [[mean-a n-a] (mean-n a)
+        [mean-b n-b] (mean-n b)
+        deviation-a (fn [x] (- x mean-a))
+        deviation-b (fn [x] (- x mean-b))]
+    ; sum(deviation(a) * deviation(b)) / (n - 1)
+    (/ (reduce + (map * (map deviation-a a) (map deviation-b b)))
+       (- n-a 1))))

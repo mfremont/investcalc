@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ReplState" timestamp="1415281194359">{:repl-history {:ide [], :local [&quot;(require [net.mrf.investcalc.stat :as stat])&quot; &quot;(require [net.mrf.investcalc.stat :as stat :reload])&quot;], :remote []}}</component>
+  <component name="ReplState" timestamp="1415453848025">{:repl-history {:ide [], :local [&quot;(require [net.mrf.investcalc.stat :as stat])&quot; &quot;(require [net.mrf.investcalc.stat :as stat :reload])&quot; &quot;(require '[net.mrf.investcalc.stat :as stat])&quot; &quot;(stat/variance-p [0.1M 0.1M 0.1M 0.1M])&quot; &quot;(def s (range 26))&quot; &quot;(def evens (filter even? s))&quot; &quot;(def odds (filter odd? s))&quot; &quot;evens&quot; &quot;(+ evens)&quot; &quot;(reduce + odds)&quot; &quot;(reduce + evens)&quot;], :remote []}}</component>
 </project>
 
