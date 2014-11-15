@@ -1,6 +1,8 @@
 # intelliJ
 .idea/
+*.iml
 
+# leiningen and clojure compiler/repl
 /target
 /classes
 /checkouts
@@ -10,3 +12,6 @@ pom.xml.asc
 *.class
 /.lein-*
 /.nrepl-port
+
+# Mac OS
+.DS_Store
