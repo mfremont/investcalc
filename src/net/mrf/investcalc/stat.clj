@@ -32,7 +32,8 @@
   (math/expt (- x mean) 2))
 
 (defn variance-p
-  "Calculates the variance of the population represented by the seq series."
+  "Calculates the variance of the population represented by the seq series. An IllegalArgumentException is thrown if
+  the series is empty."
   [series]
   (let [[mean n] (mean-n series)]
     (if (> n 0)
@@ -41,7 +42,8 @@
       (throw (IllegalArgumentException. "variance-p can only be calculated for a sequence of one or more elements")))))
 
 (defn variance-s
-  "Calculates the variance of the sample represented by the seq series."
+  "Calculates the variance of the sample represented by the seq series. An IllegalArgumentException is thrown if
+  the series contains fewer than two elements."
   [series]
   (let [[mean n] (mean-n series)]
     (if (> n 1)
@@ -50,39 +52,45 @@
       (throw (IllegalArgumentException. "variance-s can only be calculated for a sequence of two or more elements")))))
 
 (defn stddev-p
-  "Calculates the standard deviation of the population represented by the seq series."
+  "Calculates the standard deviation of the population represented by the seq series. An IllegalArgumentException is
+  thrown if the series is empty."
   [series]
   (math/sqrt (variance-p series)))
 
 (defn stddev-s
-  "Calculates the standard deviation of the sample represented by the seq series."
+  "Calculates the standard deviation of the sample represented by the seq series. An IllegalArgumentException is thrown
+  if the series contains fewer than two elements."
   [series]
   (math/sqrt (variance-s series)))
 
 (defn covariance-p
-  "Calculates the covariance of the popluations represented by the seqs A and B."
+  "Calculates the covariance of the popluations represented by the seqs A and B. Covariance can only be calculated for
+  populations that are the same size and each has one or more elements; an IllegalArgumentException is thrown if these
+  conditions are not met."
   [a b]
   (let [[mean-a n-a] (mean-n a)
         [mean-b n-b] (mean-n b)
         deviation-a (fn [x] (- x mean-a))
         deviation-b (fn [x] (- x mean-b))]
     (cond
-      (not (= n-a n-b)) (throw (IllegalArgumentException. "covariance can only be calculated if series are same length"))
-      (= 0 n-a) (throw (IllegalArgumentException. "covariance can only be calculated if for series with one or more elements"))
+      (not (= n-a n-b)) (throw (IllegalArgumentException. "covariance can only be calculated for series that are same length"))
+      (= 0 n-a) (throw (IllegalArgumentException. "covariance can only be calculated for series with one or more elements"))
       ; sum(deviation(a) * deviation(b)) / n
       :else (/ (reduce + (map * (map deviation-a a) (map deviation-b b)))
                n-a))))
 
 (defn covariance-s
-  "Calculates the covariance of the samples represented by the seqs A and B."
+  "Calculates the covariance of the samples represented by the seqs A and B. Covariance can only be calculated for
+  samples that are the same size and each has two or more elements; an IllegalArgumentException is thrown if these
+  conditions are not met."
   [a b]
   (let [[mean-a n-a] (mean-n a)
         [mean-b n-b] (mean-n b)
         deviation-a (fn [x] (- x mean-a))
         deviation-b (fn [x] (- x mean-b))]
     (cond
-      (not (= n-a n-b)) (throw (IllegalArgumentException. "covariance can only be calculated if series are same length"))
-      (< n-a 2) (throw (IllegalArgumentException. "covariance can only be calculated if for series with two or more elements"))
+      (not (= n-a n-b)) (throw (IllegalArgumentException. "covariance can only be calculated for series that are same length"))
+      (< n-a 2) (throw (IllegalArgumentException. "covariance can only be calculated for series with two or more elements"))
       ; sum(deviation(a) * deviation(b)) / (n - 1)
       :else (/ (reduce + (map * (map deviation-a a) (map deviation-b b)))
                (- n-a 1)))))
